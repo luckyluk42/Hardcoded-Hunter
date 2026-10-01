@@ -1,0 +1,37 @@
+[package]
+name = "hardcoded-hunter"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+
+[lib]
+name = "main"
+crate-type = ["cdylib", "rlib"]
+
+[package.metadata.android]
+package = "cz.hardcodedhunter.app"
+apk_name = "hardcoded-hunter"
+build_targets = ["armv7-linux-androideabi"]
+
+[package.metadata.android.sdk]
+min_sdk_version = 23
+target_sdk_version = 33
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+
+[dependencies]
+walkdir = "2.5"
+regex = "1.10"
+num_cpus = "1.16"
+eframe = { version = "0.29", features = ["android-native-activity"] }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+rfd = "0.14"
+
+[target.'cfg(target_os = "android")'.dependencies]
+winit = { version = "0.30", default-features = false, features = ["android-native-activity"] }
